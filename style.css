@@ -1,0 +1,111 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    color: white;
+}
+
+body {
+    width: 100vw;
+    height: 100vh;
+    background-color: black;
+}
+
+header {
+    width: 100%;
+    height: 80px;
+    background-color: blanchedalmond;
+}
+
+.header-wrapper {
+    width: 100%;
+    max-width: 1200px;
+    height: 100%;
+    margin: 0 auto;
+    padding: 0 50px;
+
+
+    display: flex;
+    gap: 16px;
+    align-items: center;
+}
+
+.header-wrapper img {
+    height: 50px;
+    width: 50px;
+}
+
+main {
+    width: 100%;
+    max-width: 1200px;
+    height: 100%;
+    margin: 0 auto;
+}
+
+.content {
+    width: 100%;
+    height: 100%;
+    margin: 0 auto;
+    padding: 50px;
+
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.book{
+    width: 100%;
+    max-width: 200px;
+
+    display: flex;
+    gap: 8px;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    
+}
+
+.content h1 {
+    font-size: 1rem;
+    color: white;
+    align-self: center;
+}
+
+.book-cover {
+    height: 150px;
+    width: 100%;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+}
+
+.book-cover img {
+    height: 50px;
+    width: 50px;
+}
+
+.book-info {
+    width: 100%;
+}
+
+.info-top {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+
+
+table {
+    font-size: 0.5rem;
+}
+
+.comment-section{
+    height: 100px;
+    width: 100%;
+    overflow: scroll;
+}
+
+input{
+    color: black;
+}
