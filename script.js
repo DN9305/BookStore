@@ -1,104 +1,103 @@
-import { books } from "./js/db.js"
+import { dbBooks } from "./js/db.js"
+import { getTemplateBooks, getTemplateComments } from "./js/templates.js"
 
 
-const CONTENT = document.getElementById("content")
+// //////////////////
+// VARIABLES
+// //////////////////
+
+export let books = []
 
 
-function renderContent(i) {
+// //////////////////
+// INIT-FUNCTION
+// //////////////////
+
+
+function init() {
+    let booksUpdated = localStorage.getItem("booksLatest")
+    if (booksUpdated) {
+        books = JSON.parse(booksUpdated)
+        console.log(books)
+    } else {
+        books = dbBooks
+    }
+    renderContent()
+}
+
+
+// //////////////////
+// MAIN-FUNCTIONS 
+// //////////////////
+
+
+function renderContent() {
+    const CONTENT = document.getElementById("content")
+    CONTENT.innerHTML = ""
 
     for (let i = 0; i < books.length; i++) {
-        const element = books[i]
+        CONTENT.innerHTML += getTemplateBooks(books, i)
 
-        CONTENT.innerHTML += /*html*/`
-        <div class="book" id="book-${i + 1}">
-            <h1>${books[i].name}</h1>
-            <div class="book-cover">
-                <img src="./assets/img/book_cover.png" alt="book cover, pink.">
-            </div>
-            <div class="book-info">
-                <div class="info-top">
-                    <span class="price">${books[i].price}</span>
-                    <div class="like_part">
-                        <span class="like-counter" id="likes-${i+1}">${books[i].likes}</span>
-                        <img src="" alt="" onclick="like(${i})">
-                    </div>
-                </div>
-                <div class="info-bottom">
-                    <table>
-                        <tr>
-                            <td>Author</td>
-                            <td>: ${books[i].author}</td>
-                        </tr> 
-                        <tr>
-                            <td>Erscheinungsjahr</td>
-                            <td>: ${books[i].publishedYear}</td>
-                        </tr> 
-                        <tr>
-                            <td>Genre</td>
-                            <td>: ${books[i].genre}</td>
-                        </tr> 
-                    </table>
-                </div>
-            </div>
-            <div class="comment-section">
-                <div class="comments">
-                    <table id="table-${i+1}">
-                    </table>
-                </div>
-            </div>
-            <div class="action_comment"></div>
-            <input type="text" id="input--${i+1}" placeholder="Schreibe dein Kommentar...">
-            <button> Send </button>
-        </div>
-    `
-        let indexBook = i
-
-        for (let l = 0; l < element.comments.length; l++) {
-
-            const index = element.comments.length
-            if (l == 0) {
-                document.getElementById(`table-${indexBook +1}`).innerHTML += /*html*/`
-                <tr>
-                    <td>${books[indexBook].comments[index - 1].name}</td>
-                    <td>: ${books[indexBook].comments[index - 1].comment}</td>
-                </tr>
-            `
-            } else {
-                document.getElementById(`table-${indexBook +1}`).innerHTML += /*html*/`
-                <tr>
-                    <td>${books[indexBook].comments[index - (1+l)].name}</td>
-                    <td>: ${books[indexBook].comments[index - (1+l)].comment}</td>
-                </tr>
-            `
-            }
+        for (let l = 0; l < books[i].comments.length | l == 0; l++) {
+            getTemplateComments(i, l)
         }
     }
-
 }
 
-function like (i){
-    
-    let switchCount = document.getElementById(`likes-${i+1}`)
-    let liked = books[i].liked
-    let countLikes = books[i].likes
-    
-    if (liked == false) {
-        liked = true
-        switchCount.innerHTML= /*html*/`
-            ${countLikes+1}
-        `
 
-    } else {
-        liked = false
-        countLikes-1
-        switchCount.innerHTML= /*html*/`
-            ${countLikes-1}
+// //////////////////
+// HELP-FUNCTIONS 
+// //////////////////
+
+//addEventListener lernen
+window.likeOnClick = likeOnClick
+window.pushComment = pushComment
+
+
+function likeOnClick(i) {
+    let currentLikesNum = books[i].likes
+    let idCount = i + 1
+
+    if (!books[i].liked) {
+        let likesUpdatedPos = currentLikesNum + 1
+
+        books[i].liked = true
+        books[i].likes = likesUpdatedPos
+
+        document.getElementById(`likes-${idCount}`).innerHTML = /*html*/`
+            ${likesUpdatedPos}
         `
+        document.getElementById(`liked-${idCount}`).style.fill = "red"
+    } else {
+        let likesUpdatedNeg = currentLikesNum - 1
+
+        books[i].liked = false
+        books[i].likes = likesUpdatedNeg
+
+        document.getElementById(`likes-${idCount}`).innerHTML = /*html*/`
+            ${likesUpdatedNeg}
+        `
+        document.getElementById(`liked-${idCount}`).style.fill = "grey"
     }
 }
 
-function addComment(){}
+function pushComment(i) {
+    let idCount = i + 1
+    let commentByUser = document.getElementById(`input-${idCount}`).value
+
+    if (commentByUser != "") {
+        books[i].comments.push({ name: "Guest", comment: commentByUser })
+        let booksUpdateComments = JSON.stringify(books)
+        localStorage.setItem("booksLatest", booksUpdateComments)
+        renderContent()
+    } else {
+        return
+    }
+}
 
 
+// //////////////////
+// FUNCTION-CALLS
+// //////////////////
 
-renderContent()
+init()
