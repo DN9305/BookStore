@@ -6,8 +6,9 @@
 }
 
 body {
-    width: 100vw;
-    height: 100%;
+    width: 100%;
+    min-height: 100vh;
+
     display: flex;
     flex-direction: column;
     background-color: black;
@@ -15,7 +16,7 @@ body {
 
 header {
     width: 100%;
-    height: 80px;
+    height: 5rem;
     background-color: blanchedalmond;
 }
 
@@ -25,15 +26,17 @@ header span {
 
 .header-wrapper {
     width: 100%;
-    max-width: 1200px;
+    max-width: 75rem;
     height: 100%;
     margin: 0 auto;
-    padding: 0 50px;
+    padding: 0;
 
     display: flex;
-    gap: 16px;
+    gap: 1rem;
     align-items: center;
     justify-content: center;
+
+    font-size: 2.5rem;
 }
 
 .header-wrapper img {
@@ -41,33 +44,27 @@ header span {
     width: 50px;
 }
 
-main {
-    flex: 1;
+.content {
     width: 100%;
-    max-width: 1200px;
+    max-width: 75rem;
     height: 100%;
     margin: 0 auto;
-}
-
-.content {
+    padding: 3.125rem;
     flex: 1;
-    width: 100%;
-    height: auto;
-    margin: 0 auto;
-    padding: 50px;
 
     display: flex;
+    gap: 1.5rem;
     justify-content: space-evenly;
-    gap: 25px;
     flex-wrap: wrap;
 }
 
 .book {
-    width: 200px;
-    padding: 10px;
+    height: auto;
+    width: 31.25rem;
+    padding: 0.625rem;
 
     display: flex;
-    gap: 15px;
+    gap: 1rem;
     flex-direction: column;
     align-items: flex-start;
     justify-content: center;
@@ -77,15 +74,16 @@ main {
 }
 
 .content h1 {
-    font-size: 1rem;
-    color: white;
-    align-self: center;
-    text-align: center;
     flex: 1;
+    align-self: center;
+    
+    text-align: center;
+    font-size: 2.5rem;
+    color: white; 
 }
 
 .book-cover {
-    height: 150px;
+    height: 9.375rem;
     width: 100%;
 
     display: flex;
@@ -103,59 +101,66 @@ main {
 
 .book-info {
     width: 100%;
+
     display: flex;
-    gap: 15px;
+    gap: 1rem;
     flex-direction: column;
+
+    font-size: 1.5rem;
 }
 
 .info-top {
     width: 100%;
+
     display: flex;
     justify-content: space-between;
     align-items: center;
+
+    font-size: 2rem;
 }
 
 .like-part {
     display: flex;
-    gap: 4px;
+    gap: 0.25rem;
     align-items: center;
 }
 
 .info-top svg {
+    width: 25px;
+    height: 25px;
+
     cursor: pointer;
-    width: 15px;
-    height: 15px;
 }
 
-table {
-    font-size: 0.5rem;
-}
-
-table th{
-    padding-bottom: 3px;
+table th {
+    padding-bottom: 1rem;
 
     display: flex;
 
     text-decoration: underline;
-    font-size: 10px;
 }
+
+.comments {
+    font-size: 1.25rem;
+}
+
 .comments td {
     vertical-align: top;
-    padding-bottom: 3px;
+    padding-bottom: 0.1875rem;
 }
 
 .td-name {
     width: 50px;
+    padding-right: 10px;
+
+    font-size: 1rem;
     border-right: 1px solid yellow;
 }
 
-.first-comment {
-    font-size: 1rem;
-}
-
 .comment-section {
-    height: 100px;
+    height: 150px;
     width: 100%;
+
     overflow: auto;
     overflow-x: hidden;
     scrollbar-width: thin;
@@ -163,41 +168,128 @@ table th{
 
 .send-section {
     width: 100%;
+
     display: flex;
-    gap: 8px;
+    gap: 0.5rem;
     align-items: center;
     justify-content: space-between;
 }
 
 .send-section input {
+    height: 1.875rem;
     width: 100%;
+    padding: 10px;
+
     color: black;
+    border-radius: 10px;
 
     &::placeholder {
-        font-size: 0.6rem;
+        font-size: 1rem;
     }
 }
 
 .send-section button {
+    width: 25%;
+    height: 1.875rem;
+
     color: black;
+    border-radius: 10px;
 }
 
 footer {
     width: 100%;
-    height: 80px;
+    height: 5rem;
     background-color: blanchedalmond;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .footer-wrapper {
     width: 100%;
-    max-width: 1200px;
+    max-width: 75rem;
     height: 100%;
-    
+
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
 footer a {
+    font-size: 2rem;
     color: black;
+}
+
+@media screen and (max-width: 560px) {
+    .content h1 {
+        font-size: 1.5rem
+    }
+
+    .book {
+        padding: clamp(0.313rem, -0.104rem + 2.083cqw, 0.625rem);
+    }
+
+    .info-top {
+        font-size: 1.25rem;
+    }
+
+    .info-top svg {
+        height: 20px;
+        width: 20px;
+    }
+
+    .info-bottom {
+        font-size: clamp(1rem, 0.333rem + 3.333cqw, 1.5rem);
+    }
+
+    .info-bottom td,
+    tr {
+        display: flex;
+    }
+
+    .info-bottom .td-left{
+        font-style: italic;
+    }
+
+    .td-name {
+        padding-right: 4px;
+
+        font-size: 1rem;
+        font-style: italic;
+        border: none;
+    }
+
+    .comments {
+        font-size: clamp(1rem, 0.333rem + 3.333cqw, 1.5rem);
+    }
+
+    .comments table {
+        display: flex;
+        gap: 1rem;
+        flex-direction: column;
+    }
+
+    .comments th {
+        padding-bottom: 0;
+    }
+
+    .comments tr {
+        display: flex;
+        gap: .25rem;
+        flex-direction: column;
+    }
+
+    .td-comment {
+        border-left: 2px solid rgb(224, 7, 224);
+        padding-left: 5px;
+    }
+
+    .send-section input {
+        padding: 10px;
+
+        &::placeholder {
+            font-size: clamp(0.625rem, 0.125rem + 2.5cqw, 1rem);
+        }
+    }
 }

@@ -6,23 +6,22 @@ import { getTemplateBooks, getTemplateComments } from "./js/templates.js"
 // VARIABLES
 // //////////////////
 
+
 export let books = []
 
 
 // //////////////////
-// INIT-FUNCTION
+// LOCALSTORAGE
 // //////////////////
 
 
-function init() {
-    let booksUpdated = localStorage.getItem("booksLatest")
+function updateBooks() {
+    const booksUpdated = localStorage.getItem("booksLatest")
     if (booksUpdated) {
         books = JSON.parse(booksUpdated)
-        console.log(books)
     } else {
         books = dbBooks
     }
-    renderContent()
 }
 
 
@@ -34,13 +33,25 @@ function init() {
 function renderContent() {
     const CONTENT = document.getElementById("content")
     CONTENT.innerHTML = ""
-
     for (let i = 0; i < books.length; i++) {
         CONTENT.innerHTML += getTemplateBooks(books, i)
-
+        fillLike(i)
         for (let l = 0; l < books[i].comments.length | l == 0; l++) {
             getTemplateComments(i, l)
         }
+    }
+}
+
+function renderCommentSection(i) {
+    let idCount = i + 1
+    console.log(document.getElementById(`table-${ idCount }`))
+    document.getElementById(`input-${idCount}`).value = ""
+    document.getElementById(`table-${idCount}`).innerHTML = /*html*/`
+        <th>Comments:</th>
+    `
+    console.log(books[i].comments.length)
+    for (let l = 0; l < books[i].comments.length; l++) {
+        getTemplateComments(i, l)
     }
 }
 
@@ -52,7 +63,7 @@ function renderContent() {
 //addEventListener lernen
 window.likeOnClick = likeOnClick
 window.pushComment = pushComment
-
+window.fillLike = fillLike
 
 function likeOnClick(i) {
     let currentLikesNum = books[i].likes
@@ -78,7 +89,11 @@ function likeOnClick(i) {
             ${likesUpdatedNeg}
         `
         document.getElementById(`liked-${idCount}`).style.fill = "grey"
+
     }
+    let booksUpdateLikes = JSON.stringify(books)
+    localStorage.setItem("booksLatest", booksUpdateLikes)
+    updateBooks()
 }
 
 function pushComment(i) {
@@ -89,9 +104,19 @@ function pushComment(i) {
         books[i].comments.push({ name: "Guest", comment: commentByUser })
         let booksUpdateComments = JSON.stringify(books)
         localStorage.setItem("booksLatest", booksUpdateComments)
-        renderContent()
+        updateBooks()
+        renderCommentSection(i)
     } else {
         return
+    }
+}
+
+function fillLike(i) {
+    let idCount = i + 1
+    if (!books[i].liked) {
+        document.getElementById(`liked-${idCount}`).style.fill = "grey"
+    } else {
+        document.getElementById(`liked-${idCount}`).style.fill = "red"
     }
 }
 
@@ -100,4 +125,5 @@ function pushComment(i) {
 // FUNCTION-CALLS
 // //////////////////
 
-init()
+updateBooks()
+renderContent()

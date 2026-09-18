@@ -30,15 +30,15 @@ export function getTemplateBooks(books, i) {
                     <table>
                         <th>Book-Info:</th>
                         <tr>
-                            <td>Author</td>
+                            <td class="td-left">Author</td>
                             <td>: ${element.author}</td>
                         </tr> 
                         <tr>
-                            <td>Erscheinungsjahr</td>
+                            <td class="td-left">Erscheinungsjahr</td>
                             <td>: ${element.publishedYear}</td>
                         </tr> 
                         <tr>
-                            <td>Genre</td>
+                            <td class="td-left">Genre</td>
                             <td>: ${element.genre}</td>
                         </tr> 
                     </table>
@@ -57,22 +57,22 @@ export function getTemplateBooks(books, i) {
             </section>
         </div>
     `
-}
 
+}
 
 export function getTemplateComments(i, l) {
     const index = books[i].comments.length
     let idCount = i + 1
-
+    
     if (index === 0) {
         document.getElementById(`table-${idCount}`).innerHTML = /*html*/`
-            <p class="first-comment">Be the first to Comment</p>
+            <th class="first-comment" id="first-comment-${idCount}">Be the first to Comment</th>
         `
     } else {
         document.getElementById(`table-${idCount}`).innerHTML += /*html*/`
         <tr>
             <td class="td-name">[${books[i].comments[index - (l + 1)].name}]:</td>
-            <td>${books[i].comments[index - (l + 1)].comment}</td>
+            <td class="td-comment">${books[i].comments[index - (l + 1)].comment}</td>
         </tr >
         `
     }
