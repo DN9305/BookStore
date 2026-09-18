@@ -1,5 +1,5 @@
 import { dbBooks } from "./js/db.js"
-import { getTemplateBooks, getTemplateComments } from "./js/templates.js"
+import { getTemplateBooks, getTemplateComments, getTemplateCommentsPlaceholder, getTemplateLike } from "./js/templates.js"
 
 
 // //////////////////
@@ -24,6 +24,24 @@ function updateBooks() {
     }
 }
 
+function saveToLocalStorage() {
+    let booksUpdateLikes = JSON.stringify(books)
+    localStorage.setItem("booksLatest", booksUpdateLikes)
+    updateBooks()
+}
+
+
+// //////////////////
+// INIT-FUNCTIONS 
+// //////////////////
+
+
+window.init = init
+
+function init() {
+    updateBooks()
+    renderContent()
+}
 
 // //////////////////
 // MAIN-FUNCTIONS 
@@ -34,24 +52,32 @@ function renderContent() {
     const CONTENT = document.getElementById("content")
     CONTENT.innerHTML = ""
     for (let i = 0; i < books.length; i++) {
-        CONTENT.innerHTML += getTemplateBooks(books, i)
+        let lengthComments = books[i].comments.length
+        let idCount = i + 1
+        CONTENT.innerHTML += getTemplateBooks(books, i, idCount)
+        renderToEuro(idCount)
         fillLike(i)
-        for (let l = 0; l < books[i].comments.length | l == 0; l++) {
-            getTemplateComments(i, l)
+        for (let l = 0; l < lengthComments | l == 0; l++) {
+            if (lengthComments === 0) {
+                getTemplateCommentsPlaceholder(idCount)
+            } else {
+                getTemplateComments(i, l, lengthComments, idCount)
+            }
         }
     }
 }
 
 function renderCommentSection(i) {
     let idCount = i + 1
-    console.log(document.getElementById(`table-${ idCount }`))
+    console.log(document.getElementById(`table-${idCount}`))
     document.getElementById(`input-${idCount}`).value = ""
     document.getElementById(`table-${idCount}`).innerHTML = /*html*/`
         <th>Comments:</th>
     `
     console.log(books[i].comments.length)
-    for (let l = 0; l < books[i].comments.length; l++) {
-        getTemplateComments(i, l)
+    let lengthComments = books[i].comments.length
+    for (let l = 0; l < lengthComments; l++) {
+        getTemplateComments(i, l, lengthComments, idCount)
     }
 }
 
@@ -66,34 +92,23 @@ window.pushComment = pushComment
 window.fillLike = fillLike
 
 function likeOnClick(i) {
-    let currentLikesNum = books[i].likes
-    let idCount = i + 1
-
+    let idCount = i+1
+    let currentLikes = books[i].likes
     if (!books[i].liked) {
-        let likesUpdatedPos = currentLikesNum + 1
 
         books[i].liked = true
-        books[i].likes = likesUpdatedPos
+        books[i].likes = currentLikes +1
 
-        document.getElementById(`likes-${idCount}`).innerHTML = /*html*/`
-            ${likesUpdatedPos}
-        `
+        getTemplateLike(idCount, books[i].likes)
         document.getElementById(`liked-${idCount}`).style.fill = "red"
     } else {
-        let likesUpdatedNeg = currentLikesNum - 1
-
         books[i].liked = false
-        books[i].likes = likesUpdatedNeg
+        books[i].likes = currentLikes -1
 
-        document.getElementById(`likes-${idCount}`).innerHTML = /*html*/`
-            ${likesUpdatedNeg}
-        `
+        getTemplateLike(idCount, books[i].likes)
         document.getElementById(`liked-${idCount}`).style.fill = "grey"
-
     }
-    let booksUpdateLikes = JSON.stringify(books)
-    localStorage.setItem("booksLatest", booksUpdateLikes)
-    updateBooks()
+    saveToLocalStorage()
 }
 
 function pushComment(i) {
@@ -102,9 +117,7 @@ function pushComment(i) {
 
     if (commentByUser != "") {
         books[i].comments.push({ name: "Guest", comment: commentByUser })
-        let booksUpdateComments = JSON.stringify(books)
-        localStorage.setItem("booksLatest", booksUpdateComments)
-        updateBooks()
+        saveToLocalStorage()
         renderCommentSection(i)
     } else {
         return
@@ -120,10 +133,15 @@ function fillLike(i) {
     }
 }
 
+function renderToEuro(idCount) {
+    let element = document.getElementById(`price-${idCount}`)
+    let zahl = parseFloat(element.dataset.price)
+    let euro = new Intl.NumberFormat('de-DE', {
+        style: 'currency',
+        currency: 'EUR'
+    }).format(zahl);
+    element.innerHTML = /*html*/`
+        ${euro}
+    `
+}
 
-// //////////////////
-// FUNCTION-CALLS
-// //////////////////
-
-updateBooks()
-renderContent()

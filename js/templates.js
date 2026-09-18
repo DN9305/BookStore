@@ -1,26 +1,22 @@
 import { books } from "../script.js"
 
-
 // //////////////////
 // TEMPLATE FUNCTIONS 
 // //////////////////
 
 
-export function getTemplateBooks(books, i) {
-    let element = books[i]
-    let idCount = i + 1
-
+export function getTemplateBooks(books, i, idCount) {
     return /*html*/`
         <div id ="book-${idCount}" class="book">
-            <h1>${element.name}</h1>
+            <h1>${books[i].name}</h1>
             <div class="book-cover">
                 <img src="./assets/img/book_cover.png" alt="book cover, pink.">
             </div>
             <section class="book-info">
                 <section class="info-top">
-                    <span class="price">${priceEuro(element.price)}</span>
+                    <span id="price-${idCount}" class="price" data-price="${books[i].price}">${books[i].price}</span>
                     <div class="like-part">
-                        <span id="likes-${idCount}" class="like-counter" >${element.likes}</span>
+                        <span id="likes-${idCount}" class="like-counter" >${books[i].likes}</span>
                         <svg width="20" height="18" viewBox="0 0 20 18" fill="none" xmlns="http://www.w3.org/2000/svg" alt="A grey heart, if clicked it turns red" onclick="likeOnClick(${i})" onkeydown="if(event.key==='Enter') likeOnClick(${i})"  tabindex="0" role="button" aria-label="choose weather you like the book or not">
                             <path id="liked-${idCount}" d="M10 17.675C9.76667 17.675 9.52917 17.6333 9.2875 17.55C9.04583 17.4667 8.83333 17.3333 8.65 17.15L6.925 15.575C5.15833 13.9583 3.5625 12.3542 2.1375 10.7625C0.7125 9.17083 0 7.41667 0 5.5C0 3.93333 0.525 2.625 1.575 1.575C2.625 0.525 3.93333 0 5.5 0C6.38333 0 7.21667 0.1875 8 0.5625C8.78333 0.9375 9.45 1.45 10 2.1C10.55 1.45 11.2167 0.9375 12 0.5625C12.7833 0.1875 13.6167 0 14.5 0C16.0667 0 17.375 0.525 18.425 1.575C19.475 2.625 20 3.93333 20 5.5C20 7.41667 19.2917 9.175 17.875 10.775C16.4583 12.375 14.85 13.9833 13.05 15.6L11.35 17.15C11.1667 17.3333 10.9542 17.4667 10.7125 17.55C10.4708 17.6333 10.2333 17.675 10 17.675ZM9.05 4.1C8.56667 3.41667 8.05 2.89583 7.5 2.5375C6.95 2.17917 6.28333 2 5.5 2C4.5 2 3.66667 2.33333 3 3C2.33333 3.66667 2 4.5 2 5.5C2 6.36667 2.30833 7.2875 2.925 8.2625C3.54167 9.2375 4.27917 10.1833 5.1375 11.1C5.99583 12.0167 6.87917 12.875 7.7875 13.675C8.69583 14.475 9.43333 15.1333 10 15.65C10.5667 15.1333 11.3042 14.475 12.2125 13.675C13.1208 12.875 14.0042 12.0167 14.8625 11.1C15.7208 10.1833 16.4583 9.2375 17.075 8.2625C17.6917 7.2875 18 6.36667 18 5.5C18 4.5 17.6667 3.66667 17 3C16.3333 2.33333 15.5 2 14.5 2C13.7167 2 13.05 2.17917 12.5 2.5375C11.95 2.89583 11.4333 3.41667 10.95 4.1C10.8333 4.26667 10.6917 4.39167 10.525 4.475C10.3583 4.55833 10.1833 4.6 10 4.6C9.81667 4.6 9.64167 4.55833 9.475 4.475C9.30833 4.39167 9.16667 4.26667 9.05 4.1Z" fill="grey"/>
                         </svg>
@@ -31,15 +27,15 @@ export function getTemplateBooks(books, i) {
                         <th>Book-Info:</th>
                         <tr>
                             <td class="td-left">Author</td>
-                            <td>: ${element.author}</td>
+                            <td>: ${books[i].author}</td>
                         </tr> 
                         <tr>
                             <td class="td-left">Erscheinungsjahr</td>
-                            <td>: ${element.publishedYear}</td>
+                            <td>: ${books[i].publishedYear}</td>
                         </tr> 
                         <tr>
                             <td class="td-left">Genre</td>
-                            <td>: ${element.genre}</td>
+                            <td>: ${books[i].genre}</td>
                         </tr> 
                     </table>
                 </section>
@@ -60,34 +56,25 @@ export function getTemplateBooks(books, i) {
 
 }
 
-export function getTemplateComments(i, l) {
-    const index = books[i].comments.length
-    let idCount = i + 1
-    
-    if (index === 0) {
-        document.getElementById(`table-${idCount}`).innerHTML = /*html*/`
+export function getTemplateCommentsPlaceholder(idCount) {
+    return document.getElementById(`table-${idCount}`).innerHTML = /*html*/`
             <th class="first-comment" id="first-comment-${idCount}">Be the first to Comment</th>
         `
-    } else {
-        document.getElementById(`table-${idCount}`).innerHTML += /*html*/`
+}
+
+export function getTemplateComments(i, l, lengthX, idCount) {
+    return document.getElementById(`table-${idCount}`).innerHTML += /*html*/`
         <tr>
-            <td class="td-name">[${books[i].comments[index - (l + 1)].name}]:</td>
-            <td class="td-comment">${books[i].comments[index - (l + 1)].comment}</td>
+            <td class="td-name">[${books[i].comments[lengthX - (l + 1)].name}]:</td>
+            <td class="td-comment">${books[i].comments[lengthX - (l + 1)].comment}</td>
         </tr >
         `
-    }
 }
 
-
-// //////////////////
-// HELP FUNCTIONS 
-// //////////////////
-
-
-function priceEuro(preis) {
-    return new Intl.NumberFormat('de-DE', {
-        style: 'currency',
-        currency: 'EUR'
-    }).format(preis);
+export function getTemplateLike(idCount, numX){
+    return document.getElementById(`likes-${idCount}`).innerHTML = /*html*/`
+            ${numX}
+        `
 }
+
 
