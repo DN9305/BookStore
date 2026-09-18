@@ -14,7 +14,7 @@ export function getTemplateBooks(books, i, idCount) {
             </div>
             <section class="book-info">
                 <section class="info-top">
-                    <span id="price-${idCount}" class="price" data-price="${books[i].price}">${books[i].price}</span>
+                    <span id="price-${idCount}" class="price" data-price="${books[i].price}"></span>
                     <div class="like-part">
                         <span id="likes-${idCount}" class="like-counter" >${books[i].likes}</span>
                         <svg width="20" height="18" viewBox="0 0 20 18" fill="none" xmlns="http://www.w3.org/2000/svg" alt="A grey heart, if clicked it turns red" onclick="likeOnClick(${i})" onkeydown="if(event.key==='Enter') likeOnClick(${i})"  tabindex="0" role="button" aria-label="choose weather you like the book or not">
